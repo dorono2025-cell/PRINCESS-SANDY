@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Love Story</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script&family=Playfair+Display&display=swap" rel="stylesheet">
+
+<style>
+body{
+ margin:0;
+ background:black;
+ color:white;
+ text-align:center;
+ font-family:'Playfair Display',serif;
+ overflow-x:hidden;
+}
+
+/* Background animation */
+body::before{
+ content:"";
+ position:fixed;
+ inset:0;
+ background:radial-gradient(circle at center,#8b0000,#200000,#000);
+ z-index:-3;
+}
+
+/* Fireworks */
+canvas{
+ position:fixed;
+ inset:0;
+ pointer-events:none;
+ z-index:-2;
+}
+
+/* Intro Screen */
+#intro{
+ position:fixed;
+ inset:0;
+ background:radial-gradient(circle,#8b0000,#200000,#000);
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ z-index:5;
+}
+
+#intro h2{
+ font-family:'Great Vibes',cursive;
+ font-size:4rem;
+ color:gold;
+ text-shadow:0 0 30px gold;
+}
+
+.pass-container input{
+ width:60px;
+ height:70px;
+ font-size:30px;
+ text-align:center;
+ margin:8px;
+ border-radius:15px;
+ border:2px solid gold;
+ background:rgba(255,215,0,0.2);
+ color:gold;
+}
+
+button{
+ padding:14px 35px;
+ border:none;
+ border-radius:30px;
+ background:linear-gradient(45deg,gold,orange);
+ font-weight:bold;
+ cursor:pointer;
+ margin-top:20px;
+ box-shadow:0 0 25px gold;
+ transition:0.3s;
+}
+button:hover{ transform:scale(1.1); }
+
+.hidden{ display:none; }
+
+h1{
+ font-family:'Great Vibes',cursive;
+ font-size:4rem;
+ margin-top:100px;
+ text-shadow:0 0 25px gold;
+}
+
+#affirmation{
+ font-family:'Dancing Script',cursive;
+ font-size:2rem;
+ margin:20px auto;
+ max-width:800px;
+ min-height:120px;
+ line-height:1.6;
+}
+
+/* Rain */
+.fall{
+ position:fixed;
+ top:-10vh;
+ font-size:25px;
+ animation:fall linear forwards;
+ pointer-events:none;
+ z-index:-1;
+}
+@keyframes fall{
+ to{ transform:translateY(110vh); opacity:0; }
+}
+
+/* Pictures */
+.pics{
+ display:flex;
+ justify-content:center;
+ gap:25px;
+ margin-top:40px;
+}
+.pics img{
+ width:260px;
+ border-radius:20px;
+ box-shadow:0 0 30px gold;
+}
+
+/* Love Letter */
+#letter{
+ max-width:750px;
+ margin:50px auto;
+ padding:35px;
+ background:rgba(0,0,0,0.75);
+ border-radius:20px;
+ font-family:'Dancing Script',cursive;
+ font-size:1.8rem;
+ display:none;
+ box-shadow:0 0 35px gold;
+}
+</style>
+</head>
+<body>
+
+<!-- 🎵 Background Music MPEG -->
+<audio id="bgMusic" loop>
+  <source src="background.mpeg" type="audio/mpeg">
+</audio>
+
+<canvas id="fireworks"></canvas>
+
+<div id="intro">
+ <h2>Our Forever Begins 💖</h2>
+ <p>Enter the secret code to unlock my heart ✨</p>
+ <div class="pass-container">
+   <input type="password" maxlength="1">
+   <input type="password" maxlength="1">
+   <input type="password" maxlength="1">
+   <input type="password" maxlength="1">
+ </div>
+ <button id="unlock">Unlock 💌</button>
+</div>
+
+<h1 id="title" class="hidden">Princess Sandra 💖</h1>
+<div id="affirmation" class="hidden"></div>
+
+<div id="buttons" class="hidden">
+ <button id="yes">Yes 💍 Forever!</button>
+ <button id="no">No 💔</button>
+</div>
+
+<div class="pics hidden" id="pictures">
+ <img src="pic1.jpg">
+ <img src="pic2.jpg">
+</div>
+
+<div id="letter">
+ My Sweetest Love 💕<br><br>
+ From the moment you came into my life, everything became brighter.  
+ You are my answered prayer, my peace, my happiness, my forever.  
+ In your smile I see my future. In your heart I found my home.  
+ <br><br>
+ I promise to choose you every day, protect your heart, and love you endlessly.  
+ Forever yours ❤️
+</div>
+
+<script>
+const correct="2026";
+const inputs=document.querySelectorAll(".pass-container input");
+const unlock=document.getElementById("unlock");
+const intro=document.getElementById("intro");
+const title=document.getElementById("title");
+const affirmation=document.getElementById("affirmation");
+const buttons=document.getElementById("buttons");
+const yes=document.getElementById("yes");
+const no=document.getElementById("no");
+const music=document.getElementById("bgMusic");
+const pics=document.getElementById("pictures");
+const letter=document.getElementById("letter");
+
+/* Unlock */
+unlock.onclick=function(){
+ const entered=[...inputs].map(i=>i.value).join("");
+ if(entered===correct){
+   intro.style.display="none";
+   title.classList.remove("hidden");
+   affirmation.classList.remove("hidden");
+   buttons.classList.remove("hidden");
+
+   music.play();   // 🎵 Play MPEG music
+   rain();
+   typeText();
+ }
+};
+
+/* Romantic typing */
+function typeText(){
+ affirmation.innerHTML="";
+ const text="From the first day I met you, my world became magical. You are my sunshine, my calm, my forever love 💖 Will you be my Valentine?";
+ let i=0;
+ const interval=setInterval(()=>{
+   affirmation.innerHTML+=text[i];
+   i++;
+   if(i>=text.length)clearInterval(interval);
+ },40);
+}
+
+/* Rain */
+function rain(){
+ setInterval(()=>{
+   const el=document.createElement("div");
+   el.className="fall";
+   el.innerHTML=Math.random()>0.5?"💖":"🌹";
+   el.style.left=Math.random()*100+"vw";
+   el.style.animationDuration=(Math.random()*3+4)+"s";
+   document.body.appendChild(el);
+   setTimeout(()=>el.remove(),7000);
+ },250);
+}
+
+yes.onclick=function(){
+ pics.classList.remove("hidden");
+ letter.style.display="block";
+};
+
+no.onclick=function(){
+ affirmation.innerHTML="No matter what, you will always be special to me 💕";
+ buttons.style.display="none";
+};
+</script>
+
+</body>
+</html>
